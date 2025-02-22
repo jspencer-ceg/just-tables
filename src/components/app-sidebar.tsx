@@ -9,6 +9,7 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  SidebarSeparator,
 } from "@/components/ui/sidebar"
 
 // Menu items.
@@ -19,13 +20,13 @@ const items = [
     icon: Home,
   },
   {
-    title: "Payments",
+    title: "Partners",
     url: "/payments",
     icon: HandCoins,
   },
   {
-    title: "Clients",
-    url: "/clients",
+    title: "Projects",
+    url: "/projects",
     icon: Handshake,
   },
 ]
@@ -34,11 +35,11 @@ export function AppSidebar() {
   return (
     <Sidebar 
         side="left"
-        variant="floating"
         >
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupLabel>Application</SidebarGroupLabel>
+          <SidebarGroupLabel>WattTracker</SidebarGroupLabel>
+          <SidebarSeparator />
           <SidebarGroupContent>
             <SidebarMenu>
               {items.map((item) => (
