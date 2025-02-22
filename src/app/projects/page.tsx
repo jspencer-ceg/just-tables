@@ -1,14 +1,14 @@
 'use client'
 import { useEffect, useState } from "react"
-import { Payment } from "./types"
+import { Project } from "./types"
 import { columns } from "./columns"
 import { DataTable } from "./data-table"
 import { Button } from "@/components/ui/button"
-import { PaymentForm } from "./payment-form"
+import { ProjectForm } from "./project-form"
 
-async function getData(): Promise<Payment[]> {
+async function getData(): Promise<Project[]> {
   try {
-    const response = await fetch('https://x8ki-letl-twmt.n7.xano.io/api:-0dSTLDP/items', {
+    const response = await fetch('https://x8ki-letl-twmt.n7.xano.io/api:b-vUtTCH/projects', {
       headers: {
         'Authorization': `Bearer ${process.env.XANO_API_KEY}`,
         'Content-Type': 'application/json',
@@ -21,13 +21,14 @@ async function getData(): Promise<Payment[]> {
 
     const data = await response.json();
     
-    // Transform Xano data to match Payment type
+    // Transform Xano data to match Project type
     return data.map((item: any) => ({
       id: item.id.toString(),
-      name: item.name,
-      amount: item.amount,
-      status: item.status,
-      email: item.email,
+      project_name: item.project_name,
+      project_start: item.project_start,
+      project_end: item.project_end,
+      location: item.location,
+      deploy_status: item.deploy_status,
     }));
   } catch (error) {
     console.error('Error fetching data:', error);
@@ -36,9 +37,9 @@ async function getData(): Promise<Payment[]> {
 }
 
 export default function DemoPage() {
-  const [data, setData] = useState<Payment[]>([])
+  const [data, setData] = useState<Project[]>([])
   const [isModalOpen, setIsModalOpen] = useState(false)
-  const [editingPayment, setEditingPayment] = useState<Payment | undefined>()
+  const [editingProject, setEditingProject] = useState<Project | undefined>()
 
   useEffect(() => {
     const fetchData = async () => {
@@ -48,14 +49,14 @@ export default function DemoPage() {
     fetchData()
   }, [])
 
-  const handleEdit = (payment: Payment) => {
-    setEditingPayment(payment)
+  const handleEdit = (project: Project) => {
+    setEditingProject(project)
     setIsModalOpen(true)
   }
 
   const handleClose = () => {
     setIsModalOpen(false)
-    setEditingPayment(undefined)
+    setEditingProject(undefined)
     // Refresh data after closing the modal
     getData().then(setData)
   }
@@ -63,16 +64,16 @@ export default function DemoPage() {
   return (
     <div className="container mx-auto py-10">
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold">Partners</h1>
+        <h1 className="text-2xl font-bold">Projects</h1>
         <Button onClick={() => setIsModalOpen(true)}>
-          Add Partner
+          Add Project
         </Button>
       </div>
       <DataTable columns={columns(handleEdit)} data={data} />
-      <PaymentForm 
+      <ProjectForm 
         open={isModalOpen}
         onClose={handleClose}
-        initialData={editingPayment}
+        initialData={editingProject}
       />
     </div>
   )
